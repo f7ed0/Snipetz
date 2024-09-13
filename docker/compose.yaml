@@ -1,0 +1,6 @@
+services:
+  api :
+    image : snipetz/api
+    build : ./api
+    ports :
+      - 8080:8080
