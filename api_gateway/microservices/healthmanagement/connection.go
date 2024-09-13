@@ -1,6 +1,8 @@
-package microservices
+package healthmanagement
 
 import (
+	"net/http"
+	"snipetz/api_gateway/microservices"
 	common_schema "snipetz/commons/schema"
 
 	"github.com/f7ed0/golog/lg"
@@ -28,6 +30,8 @@ func Connect(c *gin.Context) {
 		return
 	}
 
-	// TODO adding microservice to the list
+	microservices.AddMicroservice(crq.MicroserviceType, crq.URI)
+
+	c.Status(http.StatusNoContent)
 
 }

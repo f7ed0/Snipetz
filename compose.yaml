@@ -1,0 +1,26 @@
+services:
+  api :
+    image : snipetz/api
+    build :
+      context : .
+      dockerfile : api.dockerfile
+      target : prod
+    ports :
+      - 80:80
+    networks :
+      - microservices_network
+      - default
+  auth:
+    image : snipetz/auth
+    build :
+      context : .
+      dockerfile : auth.dockerfile
+      target : prod
+    networks:
+      - microservices_network
+    links:
+      - api:api
+
+networks:
+  microservices_network:
+    external : false
