@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1.7-labs
+
 # --------------- STAGE 1 ----------------
 FROM golang:1.22.3 AS build
 
@@ -5,7 +7,7 @@ WORKDIR /var/www/Snipetz
 
 # RUN git clone https://github.com/f7ed0/Snipetz.git
 
-COPY . .
+COPY backend .
 
 RUN go mod tidy && go build -o auth ./auth
 

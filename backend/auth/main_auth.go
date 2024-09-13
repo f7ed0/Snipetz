@@ -2,14 +2,20 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
+	"os"
+	"snipetz/auth/schema"
 	"snipetz/commons/handlers"
 	common_schema "snipetz/commons/schema"
 	"snipetz/commons/util"
 
 	"github.com/f7ed0/golog/lg"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func main() {
@@ -20,8 +26,21 @@ func main() {
 		lg.Error.Fatalln(err.Error())
 	}
 
+	lg.Info.Println("Connecting to mongoDB...")
+	cli, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(os.Getenv("db_url")))
+	if err != nil {
+		lg.Info.Fatalln("Cant access db :", err.Error())
+	}
+	db := cli.Database("auth")
+	cur, err := db.Collection("users").Find(context.TODO(), bson.D{})
+	if err != nil {
+		lg.Info.Fatalln("Can access db :", err.Error())
+	}
+	var us []schema.User
+	cur.Decode(&us)
+	lg.Verbose.Println(us)
+
 	data, err := json.Marshal(&common_schema.ConnectionRequest{MicroserviceType: "auth", URI: "http://" + ips["eth0"][0].String()})
-	lg.Debug.Println(string(data))
 	if err != nil {
 		lg.Error.Fatalln(err.Error())
 	}

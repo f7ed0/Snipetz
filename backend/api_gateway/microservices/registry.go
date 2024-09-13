@@ -4,8 +4,6 @@ import (
 	"slices"
 	"sync"
 	"time"
-
-	"github.com/f7ed0/golog/lg"
 )
 
 type Microservice struct {
@@ -56,7 +54,6 @@ func (m MicroServiceRegistry) copy() (ret MicroServiceRegistry) {
 func GetMicroservicesRegistery() MicroServiceRegistry {
 	sync_registery.RLock()
 	defer sync_registery.RUnlock()
-	lg.Debug.Println(registery)
 	return registery
 }
 

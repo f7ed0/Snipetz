@@ -10,7 +10,6 @@ import (
 )
 
 func Connect(c *gin.Context) {
-	lg.Debug.Println(c.Request.RemoteAddr)
 	var crq common_schema.ConnectionRequest
 	// Cheking body for a connection request
 	err := c.ShouldBindBodyWithJSON(&crq)

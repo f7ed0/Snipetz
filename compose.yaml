@@ -20,6 +20,34 @@ services:
       - microservices_network
     links:
       - api:api
+      - db:db
+    environment:
+      db_url : mongodb://auth_user:auth_user@db:27017/
+  db:
+    image : mongo
+    networks:
+      - microservices_network
+      - default
+    volumes:
+      - ./db:/data/db:rw
+    environment:
+      MONGO_INITDB_ROOT_USERNAME : root
+      MONGO_INITDB_ROOT_PASSWORD : root
+  db-express:
+    image : mongo-express
+    ports:
+      - 8081:8081
+    links:
+      - db:mongo
+    networks:
+      - default
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
+  
+    
 
 networks:
   microservices_network:
