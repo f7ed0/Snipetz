@@ -1,6 +1,8 @@
-package microservices
+package registery
 
 import (
+	"errors"
+	"math/rand"
 	"slices"
 	"sync"
 	"time"
@@ -75,4 +77,15 @@ func UpdateHeartBeat(id int) {
 			}
 		}
 	}
+}
+
+func GetMicroserviceAddress(mtype string) (string, error) {
+	sync_registery.RLock()
+	defer sync_registery.RUnlock()
+	rt, ok := registery[mtype]
+	if !ok || len(rt) <= 0 {
+		return "", errors.New("mtype not known")
+	}
+	// TODO check if it si alive
+	return rt[rand.Intn(len(rt))].Uri, nil
 }

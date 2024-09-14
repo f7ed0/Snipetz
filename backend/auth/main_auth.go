@@ -6,10 +6,10 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
-	"snipetz/auth/schema"
+	"snipetz/auth/models"
 	"snipetz/commons/handlers"
-	common_schema "snipetz/commons/schema"
-	"snipetz/commons/util"
+	"snipetz/commons/schema"
+	"snipetz/commons/utils"
 
 	"github.com/f7ed0/golog/lg"
 	"github.com/gin-gonic/gin"
@@ -21,7 +21,7 @@ import (
 func main() {
 	lg.Init(lg.ALL, true)
 	lg.Info.Println("Starting authentication microservice")
-	ips, err := util.GetIPs()
+	ips, err := utils.GetIPs()
 	if err != nil {
 		lg.Error.Fatalln(err.Error())
 	}
@@ -36,11 +36,11 @@ func main() {
 	if err != nil {
 		lg.Info.Fatalln("Can access db :", err.Error())
 	}
-	var us []schema.User
+	var us []models.User
 	cur.Decode(&us)
 	lg.Verbose.Println(us)
 
-	data, err := json.Marshal(&common_schema.ConnectionRequest{MicroserviceType: "auth", URI: "http://" + ips["eth0"][0].String()})
+	data, err := json.Marshal(&schema.ConnectionRequest{MicroserviceType: "auth", URI: "http://" + ips["eth0"][0].String()})
 	if err != nil {
 		lg.Error.Fatalln(err.Error())
 	}

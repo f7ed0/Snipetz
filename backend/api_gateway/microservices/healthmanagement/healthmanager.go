@@ -2,7 +2,8 @@ package healthmanagement
 
 import (
 	"net/http"
-	"snipetz/api_gateway/microservices"
+
+	"snipetz/api_gateway/microservices/registery"
 	"time"
 
 	"github.com/f7ed0/golog/lg"
@@ -11,7 +12,7 @@ import (
 func HealthManager() {
 	for {
 		time.Sleep(10 * time.Second)
-		reg := microservices.GetMicroservicesRegistery()
+		reg := registery.GetMicroservicesRegistery()
 		for _, v := range reg {
 			for _, i := range v {
 				if time.Now().Unix()-i.LastSign > 20 {
@@ -22,9 +23,9 @@ func HealthManager() {
 						lg.Error.Fatalln("Error in healthmanager : ", err.Error())
 					}
 					if resp.StatusCode == http.StatusNoContent {
-						microservices.UpdateHeartBeat(i.Id)
+						registery.UpdateHeartBeat(i.Id)
 					} else {
-						microservices.RemoveMicroservice(i.Id)
+						registery.RemoveMicroservice(i.Id)
 					}
 				}
 			}

@@ -10,6 +10,7 @@ services:
     networks :
       - microservices_network
       - default
+  # -------------- MICROSERVICES --------------------------
   auth:
     image : snipetz/auth
     build :
@@ -23,6 +24,7 @@ services:
       - db:db
     environment:
       db_url : mongodb://auth_user:auth_user@db:27017/
+  # ----------------- DATABASES ------------------------
   db:
     image : mongo
     networks:
@@ -46,8 +48,7 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: root
       ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
       ME_CONFIG_BASICAUTH: false
-  
-    
+
 
 networks:
   microservices_network:

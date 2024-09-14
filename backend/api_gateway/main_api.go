@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"snipetz/api_gateway/microservices/healthmanagement"
 	"snipetz/api_gateway/public"
-	"snipetz/commons/util"
+	"snipetz/commons/utils"
 	"time"
 
 	"github.com/f7ed0/golog/lg"
@@ -16,7 +16,7 @@ func main() {
 	lg.Init(lg.ALL, true)
 	lg.Info.Println("Starting api gateway...")
 
-	ips, err := util.GetIPs()
+	ips, err := utils.GetIPs()
 
 	if err != nil {
 		lg.Error.Fatalln(err.Error())

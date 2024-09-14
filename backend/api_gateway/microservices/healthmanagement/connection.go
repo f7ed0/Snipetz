@@ -2,15 +2,15 @@ package healthmanagement
 
 import (
 	"net/http"
-	"snipetz/api_gateway/microservices"
-	common_schema "snipetz/commons/schema"
+	"snipetz/api_gateway/microservices/registery"
+	"snipetz/commons/schema"
 
 	"github.com/f7ed0/golog/lg"
 	"github.com/gin-gonic/gin"
 )
 
 func Connect(c *gin.Context) {
-	var crq common_schema.ConnectionRequest
+	var crq schema.ConnectionRequest
 	// Cheking body for a connection request
 	err := c.ShouldBindBodyWithJSON(&crq)
 	if err != nil {
@@ -29,7 +29,7 @@ func Connect(c *gin.Context) {
 		return
 	}
 
-	microservices.AddMicroservice(crq.MicroserviceType, crq.URI)
+	registery.AddMicroservice(crq.MicroserviceType, crq.URI)
 
 	c.Status(http.StatusNoContent)
 
