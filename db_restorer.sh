@@ -1,0 +1,1 @@
+docker exec -i snipetz-db-1 /usr/bin/mongorestore --username root --password root --authenticationDatabase admin --nsInclude="auth.*" --archive < ./dumps/auth.dump

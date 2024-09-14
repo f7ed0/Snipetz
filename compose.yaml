@@ -23,18 +23,20 @@ services:
       - api:api
       - db:db
     environment:
-      db_url : mongodb://auth_user:auth_user@db:27017/
+      db_url : mongodb://auth_user:auth_user@db:27017/?authSource=auth
   # ----------------- DATABASES ------------------------
   db:
-    image : mongo
+    image : mongodb/mongodb-community-server
     networks:
       - microservices_network
       - default
     volumes:
-      - ./db:/data/db:rw
+      - type: bind
+        source: ./.volumes/mongodb
+        target: /data/db
     environment:
-      MONGO_INITDB_ROOT_USERNAME : root
-      MONGO_INITDB_ROOT_PASSWORD : root
+      MONGODB_INITDB_ROOT_USERNAME : root
+      MONGODB_INITDB_ROOT_PASSWORD : root
   db-express:
     image : mongo-express
     ports:
