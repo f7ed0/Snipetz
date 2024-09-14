@@ -1,1 +1,2 @@
 docker exec -i snipetz-db-1 /usr/bin/mongodump --username root --password root --authenticationDatabase admin --db auth --archive > ./dumps/auth.dump
+docker exec -i snipetz-db-1 /usr/bin/mongodump --username root --password root --authenticationDatabase admin --db admin --archive > ./dumps/admin.dump
