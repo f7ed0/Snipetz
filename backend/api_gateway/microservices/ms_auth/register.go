@@ -3,9 +3,9 @@ package msauth
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"io"
 	"net/http"
+	snipetzerror "snipetz/commons/errors"
 	"snipetz/commons/schema"
 
 	"github.com/f7ed0/golog/lg"
@@ -22,7 +22,8 @@ func (m AuthMicroservice) RegisterUser(register_schema schema.AuthRegisterForm) 
 		return
 	}
 	if resp.StatusCode != http.StatusOK {
-		err = errors.New("Microservice refused the request")
+		err = snipetzerror.ErrorRefusedByMicroservice
+		return
 	}
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {

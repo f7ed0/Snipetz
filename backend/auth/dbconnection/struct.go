@@ -34,7 +34,7 @@ func (con *Connector) Init(uri string) (err error) {
 	return
 }
 
-func (con Connector) UserCreationValid(user models.User) (bool, error) {
+func (con Connector) UserCreationValid(user models.User) (bool, string, error) {
 	col := con.db.Collection("users")
 	lg.Debug.Println(col)
 	res := col.FindOne(
@@ -51,11 +51,36 @@ func (con Connector) UserCreationValid(user models.User) (bool, error) {
 	)
 
 	if res.Err() == mongo.ErrNoDocuments {
-		return true, nil
+		return true, "", nil
 	} else if res.Err() != nil {
-		return false, res.Err()
+		return false, "error", res.Err()
 	}
-	return false, nil
+	t := "unknown"
+	var usr models.User
+	err := res.Decode(&usr)
+	if err != nil {
+		return false, "error", err
+	}
+	if usr.Uid == user.Uid {
+		return false, "uid", nil
+	}
+	if usr.Email == user.Email {
+		return false, "email", nil
+	}
+	if usr.Username == user.Username {
+		return false, "username", nil
+	}
+	return false, t, err
+}
+
+func (con Connector) CreateUser(user models.User) error {
+	col := con.db.Collection("users")
+	res, err := col.InsertOne(context.TODO(), user)
+	if err != nil {
+		return err
+	}
+	lg.Debug.Println(res.InsertedID)
+	return nil
 }
 
 var Cntr Connector = NewConnector()

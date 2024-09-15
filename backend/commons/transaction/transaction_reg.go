@@ -11,17 +11,6 @@ import (
 
 // ------------------------------------
 
-type TransactionData interface {
-	UndoTransaction() error
-	CommitTransaction() error
-}
-
-type Transaction struct {
-	TransactionId string
-	Data          TransactionData
-	Commited      bool
-}
-
 type TransactionReg struct {
 	reg map[string]*Transaction
 	sync.RWMutex

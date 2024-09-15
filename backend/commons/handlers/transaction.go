@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"snipetz/commons/transaction"
 
+	"github.com/f7ed0/golog/lg"
 	"github.com/gin-gonic/gin"
 )
 
@@ -35,6 +36,6 @@ func TransactionClose(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-
+	lg.Info.Println("Closing transaction :", trid)
 	c.Status(http.StatusNoContent)
 }

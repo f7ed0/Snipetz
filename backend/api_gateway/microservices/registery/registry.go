@@ -6,13 +6,9 @@ import (
 	"slices"
 	"sync"
 	"time"
-)
 
-type Microservice struct {
-	Id       int    `json:"id"`
-	Uri      string `json:"uri"`
-	LastSign int64  `json:"last_sign"`
-}
+	"github.com/f7ed0/golog/lg"
+)
 
 type MicroServiceRegistry map[string][]Microservice
 
@@ -81,11 +77,22 @@ func UpdateHeartBeat(id int) {
 
 func GetMicroservice(mtype string) (Microservice, error) {
 	sync_registery.RLock()
-	defer sync_registery.RUnlock()
 	rt, ok := registery[mtype]
 	if !ok || len(rt) <= 0 {
 		return Microservice{}, errors.New("mtype not known")
 	}
-	// TODO check if it si alive
-	return rt[rand.Intn(len(rt))], nil
+	for len(rt) > 0 {
+		lg.Debug.Println(len(rt))
+		selected_ms := rt[rand.Intn(len(rt))]
+		if selected_ms.IsAlive() {
+			sync_registery.RUnlock()
+			UpdateHeartBeat(selected_ms.Id)
+			return rt[rand.Intn(len(rt))], nil
+		} else {
+			RemoveMicroservice(selected_ms.Id)
+		}
+	}
+	sync_registery.RUnlock()
+	lg.Debug.Println("Loop out")
+	return Microservice{}, errors.New("No ms of mtype available")
 }

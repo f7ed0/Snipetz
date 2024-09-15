@@ -8,7 +8,9 @@ WORKDIR /var/www/Snipetz
 # RUN git clone https://github.com/f7ed0/Snipetz.git
 
 COPY backend .
-RUN go mod tidy && go build -o api ./api_gateway
+RUN go mod tidy 
+RUN go test ./...
+RUN go build -o api ./api_gateway
 
 RUN ls -lah api
 

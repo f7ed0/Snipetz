@@ -8,11 +8,11 @@ import (
 )
 
 type User struct {
-	Uid      string
-	Username string
-	Email    string
-	Hash     string
-	Salt     string
+	Uid      string `json:"uid"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Hash     string `json:"hash"`
+	Salt     string `json:"salt"`
 }
 
 func GenerateUserFromRegisterForm(form schema.AuthRegisterForm) (u User, err error) {

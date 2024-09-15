@@ -38,7 +38,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	isValid, err := dbconnection.Cntr.UserCreationValid(u)
+	isValid, reason, err := dbconnection.Cntr.UserCreationValid(u)
 
 	if err != nil {
 		lg.Error.Println(err.Error())
@@ -49,7 +49,7 @@ func Register(c *gin.Context) {
 	if !isValid {
 		c.JSON(http.StatusOK, schema.AuthRegisterResponse{
 			Status:        "invalid",
-			InvalidReason: "all",
+			InvalidReason: reason,
 		})
 		return
 	}
@@ -60,7 +60,7 @@ func Register(c *gin.Context) {
 		Commited:      false,
 	}
 
-	if tr.Data.CommitTransaction() != nil {
+	if tr.CommitTransaction() != nil {
 		c.JSON(http.StatusOK, schema.AuthRegisterResponse{
 			Status: "error",
 		})

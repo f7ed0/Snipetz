@@ -9,7 +9,9 @@ WORKDIR /var/www/Snipetz
 
 COPY backend .
 
-RUN go mod tidy && go build -o auth ./auth
+RUN go mod tidy 
+RUN go test ./...
+RUN go build -o auth ./auth
 
 RUN ls -lah auth
 
