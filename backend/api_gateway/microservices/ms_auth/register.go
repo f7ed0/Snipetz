@@ -6,23 +6,18 @@ import (
 	"errors"
 	"io"
 	"net/http"
-	"snipetz/api_gateway/microservices/registery"
 	"snipetz/commons/schema"
 
 	"github.com/f7ed0/golog/lg"
 )
 
-func RegisterUser(register_schema schema.AuthRegisterForm) (response schema.AuthRegisterResponse, err error) {
+func (m AuthMicroservice) RegisterUser(register_schema schema.AuthRegisterForm) (response schema.AuthRegisterResponse, err error) {
 	response = schema.AuthRegisterResponse{}
 	b, err := json.Marshal(register_schema)
 	if err != nil {
 		return
 	}
-	addr, err := registery.GetMicroserviceAddress("auth")
-	if err != nil {
-		return
-	}
-	resp, err := http.Post(addr, "json", bytes.NewBuffer(b))
+	resp, err := http.Post(m.Uri+"/register", "json", bytes.NewBuffer(b))
 	if err != nil {
 		return
 	}

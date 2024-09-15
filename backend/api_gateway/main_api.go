@@ -69,5 +69,6 @@ func apiHandler() http.Handler {
 		c.JSON(200, "pong")
 	})
 	e.GET("/microservices/list", public.ShowMicroservices)
+	e.POST("/register", public.RegisterHandler)
 	return e
 }

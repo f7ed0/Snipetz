@@ -79,13 +79,13 @@ func UpdateHeartBeat(id int) {
 	}
 }
 
-func GetMicroserviceAddress(mtype string) (string, error) {
+func GetMicroservice(mtype string) (Microservice, error) {
 	sync_registery.RLock()
 	defer sync_registery.RUnlock()
 	rt, ok := registery[mtype]
 	if !ok || len(rt) <= 0 {
-		return "", errors.New("mtype not known")
+		return Microservice{}, errors.New("mtype not known")
 	}
 	// TODO check if it si alive
-	return rt[rand.Intn(len(rt))].Uri, nil
+	return rt[rand.Intn(len(rt))], nil
 }

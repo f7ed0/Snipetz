@@ -2,20 +2,17 @@ package main
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"net/http"
 	"os"
-	"snipetz/auth/models"
+	"snipetz/auth/dbconnection"
+	authhandlers "snipetz/auth/handlers"
 	"snipetz/commons/handlers"
 	"snipetz/commons/schema"
 	"snipetz/commons/utils"
 
 	"github.com/f7ed0/golog/lg"
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func main() {
@@ -27,18 +24,12 @@ func main() {
 	}
 
 	lg.Info.Println("Connecting to mongoDB...")
-	cli, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(os.Getenv("db_url")))
+
+	err = dbconnection.Cntr.Init(os.Getenv("db_url"))
+
 	if err != nil {
-		lg.Info.Fatalln("Cant access db :", err.Error())
+		lg.Error.Fatalf(err.Error())
 	}
-	db := cli.Database("auth")
-	cur, err := db.Collection("users").Find(context.TODO(), bson.D{})
-	if err != nil {
-		lg.Info.Fatalln("Can access db :", err.Error())
-	}
-	var us []models.User
-	cur.Decode(&us)
-	lg.Verbose.Println(us)
 
 	data, err := json.Marshal(&schema.ConnectionRequest{MicroserviceType: "auth", URI: "http://" + ips["eth0"][0].String()})
 	if err != nil {
@@ -56,5 +47,8 @@ func main() {
 
 	g := gin.Default()
 	g.Handle("GET", "/heartbeat", handlers.Heartbeathandler)
+	g.Handle("POST", "/transaction/undo", handlers.TransactionRevert)
+	g.Handle("POST", "/transaction/close", handlers.TransactionClose)
+	g.Handle("POST", "/register", authhandlers.Register)
 	g.Run(":80")
 }
