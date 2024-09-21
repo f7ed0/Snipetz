@@ -2,6 +2,8 @@ package snipetzerror
 
 import "errors"
 
-var ErrorNotImplemented error = errors.New("Not implemented")
+var ErrorNotImplemented error = errors.New("NOT IMPLEMENTED")
 
-var ErrorRefusedByMicroservice error = errors.New("Refused by microservice")
+var ErrorRefusedByMicroservice error = errors.New("REQUEST REFUSED BY MICROSERVICE")
+
+var ErrorNoJwtSecret error = errors.New("NO JWT TOKEN FOUND IN ENV")

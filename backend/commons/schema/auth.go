@@ -10,7 +10,7 @@ type AuthLoginForm struct {
 }
 
 func (l AuthLoginForm) AllFieldValid() bool {
-	return l.Username != "" && l.Password != ""
+	return utils.IsUsernameValid(l.Username) && l.Password != ""
 }
 
 // -------------------------------------------------
@@ -34,3 +34,12 @@ type AuthRegisterResponse struct {
 }
 
 // ---------------------------------------------------
+
+type AuthLoginResponse struct {
+	Status        string `json:"status"`
+	Uuid          string `json:"uuid,omitempty"`
+	InvalidReason string `json:"invalid_reason,omitempty"`
+	JwtToken      string `json:"jwt_token,omitempty"`
+}
+
+// -----------------------------------------------------

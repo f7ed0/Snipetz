@@ -7,6 +7,7 @@ import (
 	"os"
 	"snipetz/auth/dbconnection"
 	authhandlers "snipetz/auth/handlers"
+	snipetzjwt "snipetz/auth/jwt"
 	"snipetz/commons/handlers"
 	"snipetz/commons/schema"
 	"snipetz/commons/utils"
@@ -21,6 +22,12 @@ func main() {
 	ips, err := utils.GetIPs()
 	if err != nil {
 		lg.Error.Fatalln(err.Error())
+	}
+
+	err = snipetzjwt.LoadSecret()
+
+	if err != nil {
+		lg.Error.Fatalf(err.Error())
 	}
 
 	lg.Info.Println("Connecting to mongoDB...")
@@ -51,4 +58,5 @@ func main() {
 	g.Handle("POST", "/transaction/close", handlers.TransactionClose)
 	g.Handle("POST", "/register", authhandlers.Register)
 	g.Run(":80")
+
 }

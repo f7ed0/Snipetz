@@ -12,6 +12,5 @@ func IsValidEmail(email string) (ok bool) {
 		lg.Error.Println("Error during regex :", err.Error())
 		return false
 	}
-	lg.Debug.Println(ok)
 	return
 }

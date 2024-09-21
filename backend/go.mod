@@ -5,6 +5,7 @@ go 1.22.3
 require (
 	github.com/f7ed0/golog v0.0.0-20240429182352-dbdd0cc11fcb
 	github.com/gin-gonic/gin v1.10.0
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/uuid v1.6.0
 	go.mongodb.org/mongo-driver v1.16.1
 	golang.org/x/crypto v0.27.0

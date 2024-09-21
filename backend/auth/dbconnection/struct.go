@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"snipetz/auth/models"
+	snipetzerror "snipetz/commons/errors"
 
 	"github.com/f7ed0/golog/lg"
 	"go.mongodb.org/mongo-driver/bson"
@@ -81,6 +82,10 @@ func (con Connector) CreateUser(user models.User) error {
 	}
 	lg.Debug.Println(res.InsertedID)
 	return nil
+}
+
+func (con Connector) GetUser(username_or_email string) error {
+	return snipetzerror.ErrorNotImplemented
 }
 
 var Cntr Connector = NewConnector()
